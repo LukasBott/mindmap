@@ -59,7 +59,7 @@ SOFTWARE.
 </div>
 <div id = "content" style="display: none;"></div>
 <script>
-var tree = [{"name":"Double Click","color":"#807700","children":[{"name":"Double Click","color":"#a8a8cd","children":null,"address":"00"},{"name":"Click","color":"green","children":null,"address":"01"},{"name":"Click at heart","color":"#800000","children":null,"address":"02"}],"address":"0"}];
+var tree = [{"name":"Sierpinski Mind Map","color":"#37ec13","children":[{"name":"Tutorial","color":"#a8a8cd","children":[{"name":"Click on me","color":"#4c4cfa","children":null,"address":"000"},{"name":"Right click me","color":"#e65153","children":null,"address":"001","link":"https://en.wikipedia.org/wiki/Context_menu"},{"name":null,"address":"002","children":[null,{"name":"Advanced","color":"#a8a8cd","children":[null,null,{"name":"Click","color":"#6c61bd","children":[null,null,{"name":"Any","color":"#6053c6","children":[null,null,{"name":"Button","color":"#6053c6","children":[null,null,{"name":"U","color":"#3f2bd4","children":[null,null,{"name":"find","color":"#177d3e","children":null,"address":"002122222"}],"address":"00212222"}],"address":"0021222"}],"address":"002122"}],"address":"00212"}],"address":"0021"},{"name":"Double Click on me","color":"#4d4dd5","children":null,"address":"0022"}]}],"address":"00","link":""},{"name":"Versions","color":"#dab910","children":[{"name":"Version 0.1","color":"#f014d6","children":null,"address":"010","link":"https://htmlpreview.github.io/?https://github.com/LukasBott/mindmap/blob/43f8846141bf0ed86eb36b0cf8e16df8843c27ff/SierpinskiMindmap.html"},{"name":"Version 0.2","color":"#14cff0","children":null,"address":"011","link":"https://htmlpreview.github.io/?https://github.com/LukasBott/mindmap/blob/8054ece305234b14edd96fb3104b636025461c12/SierpinskiMindmap.html"},{"name":"Current Version","color":"#1e10da","children":null,"address":"012","link":"https://htmlpreview.github.io/?https://github.com/LukasBott/mindmap/blob/main/SierpinskiMindmap.html"}],"address":"01","link":"https://en.wikipedia.org/wiki/Software_versioning"},{"name":"Youtube","color":"#fb0e0e","children":[null,{"name":"White Stripes","color":"#ffffff","children":[null,null,{"name":"The hardes button to button","color":"#fd1717","children":null,"address":"0212","link":"https://www.youtube.com/watch?v=K4dx42YzQCE"}],"address":"021","link":"https://en.wikipedia.org/wiki/The_White_Stripes"},{"name":"Kyuss","color":"#1efb0e","children":[null,{"name":"Green maschine","color":"#2b8f24","children":null,"address":"0221","link":"https://www.youtube.com/watch?v=R-MSfd2S7lo"},{"name":"Space Cadet","color":"#2c2acb","children":null,"address":"0222","link":"https://www.youtube.com/watch?v=dq8YcRi7DD4"}],"address":"022","link":"https://en.wikipedia.org/wiki/Kyuss"}],"address":"02","link":"https://www.youtube.com/"}],"address":"0","link":"https://github.com/LukasBott/mindmap"}];
 window.addEventListener('resize', setCanvasSizing);
 var freeze = false;
 var blur = false;
@@ -305,6 +305,21 @@ function createMakeChildButton(node) {
     btn.onclick = function(){addChildAndDraw(node, doc.getElementById('initialChildName').value);};
     return btn;
 }
+function createLinkEditor(node) {
+    var linkEditor = doc.createElement('div');
+    var linkLabel = doc.createElement('label');
+    linkLabel.innerHTML = (node.link == null || node.link == '') ? 'Insert new link:' : 'Change Link:';
+    linkEditor.insertBefore(linkLabel, null);
+
+    linkEditor.insertBefore(doc.createElement('br'), null);
+
+    var linkInput = doc.createElement('input');
+    linkInput.name = 'link';
+    linkInput.value = (node.link == null) ? '' : node.link;
+    linkInput.onchange = function(){node[this.name] = this.value; createNodeEditor(node);};
+    linkEditor.insertBefore(linkInput, null);
+    return linkEditor;
+}
 function createNodeEditor(node) {
     var content = doc.getElementById('content');
     content.innerHTML = '';
@@ -312,7 +327,19 @@ function createNodeEditor(node) {
     if (node.color == null && node.name != null) {
         node.color = 'white';
     }
+    var linkEditor = createLinkEditor(node);
+    if (node.link == null || node.link == ''){
+        content.insertBefore(linkEditor, null);
+    }
     for (var key in node) {
+        if (key == 'link' && node[key] != ''){
+            var link = doc.createElement('a');
+            link.href = node[key];
+            link.innerHTML = 'Open Link';
+            content.insertBefore(link, null);
+            content.insertBefore(linkEditor, null);
+            continue;
+        }
         if (key == 'children') {
             //add Child Button
             content.insertBefore(btn, null);
@@ -544,14 +571,29 @@ function inTriangle(x, y, triangle) {
     return false;
 }
 canvas.addEventListener('click', onCanvasClicked);
+canvas.addEventListener('contextmenu', function(event) {onCanvasClicked(event, true);});
 var clicked = false;
-function onCanvasClicked(event){
+function onCanvasClicked(event, rightButtonClicked = false){
+    if (rightButtonClicked){
+        event.preventDefault();
+    }
     var matrix = ctx.getTransform();
     //transforming point
     var x = (event.offsetX - matrix.e)/matrix.a;
     var y = (event.offsetY - matrix.f)/matrix.d;
     var address = getAddress(x, y, getBaseTriangleByAddress(pointerAddress));
     if (address){
+        //if a link exists inside the node open it: else do nothing
+        if (rightButtonClicked) {
+            var node = getNodeByAddress(tree, address);
+            if (node.link == null || node.link == ''){
+                return;
+            }
+            var link = doc.createElement('a');
+            link.href = node.link;
+            link.click();
+            return;
+        }
         //this means double click
         if (clicked && clicked == address) {
             clicked = false;
