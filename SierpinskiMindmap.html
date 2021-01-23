@@ -59,7 +59,7 @@ SOFTWARE.
 </div>
 <div id = "content" style="display: none;"></div>
 <script>
-var tree = [{"name":"Sierpinski Mind Map","color":"#37ec13","children":[{"name":"Tutorial","color":"#a8a8cd","children":[{"name":"Click on me","color":"#4c4cfa","children":null,"address":"000"},{"name":"Right click me","color":"#e65153","children":null,"address":"001","link":"https://en.wikipedia.org/wiki/Context_menu"},{"name":null,"address":"002","children":[null,{"name":"Advanced","color":"#a8a8cd","children":[null,null,{"name":"Click","color":"#6c61bd","children":[null,null,{"name":"Any","color":"#6053c6","children":[null,null,{"name":"Button","color":"#6053c6","children":[null,null,{"name":"U","color":"#3f2bd4","children":[null,null,{"name":"find","color":"#177d3e","children":null,"address":"002122222"}],"address":"00212222"}],"address":"0021222"}],"address":"002122"}],"address":"00212"}],"address":"0021"},{"name":"Double Click on me","color":"#4d4dd5","children":null,"address":"0022"}]}],"address":"00","link":""},{"name":"Versions","color":"#dab910","children":[{"name":"Version 0.1","color":"#f014d6","children":null,"address":"010","link":"https://htmlpreview.github.io/?https://github.com/LukasBott/mindmap/blob/43f8846141bf0ed86eb36b0cf8e16df8843c27ff/SierpinskiMindmap.html"},{"name":"Version 0.2","color":"#14cff0","children":null,"address":"011","link":"https://htmlpreview.github.io/?https://github.com/LukasBott/mindmap/blob/8054ece305234b14edd96fb3104b636025461c12/SierpinskiMindmap.html"},{"name":"Current Version","color":"#1e10da","children":null,"address":"012","link":"https://htmlpreview.github.io/?https://github.com/LukasBott/mindmap/blob/main/SierpinskiMindmap.html"}],"address":"01","link":"https://en.wikipedia.org/wiki/Software_versioning"},{"name":"Youtube","color":"#fb0e0e","children":[null,{"name":"White Stripes","color":"#ffffff","children":[null,null,{"name":"The hardes button to button","color":"#fd1717","children":null,"address":"0212","link":"https://www.youtube.com/watch?v=K4dx42YzQCE"}],"address":"021","link":"https://en.wikipedia.org/wiki/The_White_Stripes"},{"name":"Kyuss","color":"#1efb0e","children":[null,{"name":"Green maschine","color":"#2b8f24","children":null,"address":"0221","link":"https://www.youtube.com/watch?v=R-MSfd2S7lo"},{"name":"Space Cadet","color":"#2c2acb","children":null,"address":"0222","link":"https://www.youtube.com/watch?v=dq8YcRi7DD4"}],"address":"022","link":"https://en.wikipedia.org/wiki/Kyuss"}],"address":"02","link":"https://www.youtube.com/"}],"address":"0","link":"https://github.com/LukasBott/mindmap"}];
+var tree = [{"name":"Sierpinski Mind Map","color":"#37ec13","children":[{"name":"Tutorial","color":"#a8a8cd","children":[{"name":"Click on me","color":"#4c4cfa","children":null,"address":"000"},{"name":"Right click me","color":"#e65153","children":null,"address":"001","link":"https://en.wikipedia.org/wiki/Context_menu"},{"name":null,"address":"002","children":[null,{"name":"Advanced","color":"#a8a8cd","children":[null,null,{"name":"Click","color":"#6c61bd","children":[null,null,{"name":"Any","color":"#6053c6","children":[null,null,{"name":"Button","color":"#6053c6","children":[null,null,{"name":"U","color":"#3f2bd4","children":[null,null,{"name":"find","color":"#177d3e","children":null,"address":"002122222"}],"address":"00212222"}],"address":"0021222"}],"address":"002122"}],"address":"00212"}],"address":"0021"},{"name":"Double Click on me","color":"#4d4dd5","children":null,"address":"0022"}]}],"address":"00","link":""},{"name":"Versions","color":"#dab910","children":[{"name":"Current Version","color":"#e9261c","children":null,"address":"010","link":"https://htmlpreview.github.io/?https://github.com/LukasBott/mindmap/blob/main/SierpinskiMindmap.html"},{"name":"Version 0.3","color":"#1e10da","children":null,"address":"011","link":"https://htmlpreview.github.io/?https://github.com/LukasBott/mindmap/blob/f6926930e5311247e57872fe9cdde1c6d7a6a252/SierpinskiMindmap.html"},{"name":null,"address":"012","children":[{"name":"Version 0.1","color":"#f014d6","children":null,"address":"0121","link":"https://htmlpreview.github.io/?https://github.com/LukasBott/mindmap/blob/43f8846141bf0ed86eb36b0cf8e16df8843c27ff/SierpinskiMindmap.html"},{"name":"Version 0.2","color":"#14cff0","children":null,"address":"0122","link":"https://htmlpreview.github.io/?https://github.com/LukasBott/mindmap/blob/8054ece305234b14edd96fb3104b636025461c12/SierpinskiMindmap.html"}]}],"address":"01","link":"https://en.wikipedia.org/wiki/Software_versioning"},{"name":"Youtube","color":"#fb0e0e","children":[null,{"name":"White Stripes","color":"#ffffff","children":[null,null,{"name":"The hardes button to button","color":"#fd1717","children":null,"address":"0212","link":"https://www.youtube.com/watch?v=K4dx42YzQCE"}],"address":"021","link":"https://en.wikipedia.org/wiki/The_White_Stripes"},{"name":"Kyuss","color":"#1efb0e","children":[null,{"name":"Green maschine","color":"#2b8f24","children":null,"address":"0221","link":"https://www.youtube.com/watch?v=R-MSfd2S7lo"},{"name":"Space Cadet","color":"#2c2acb","children":null,"address":"0222","link":"https://www.youtube.com/watch?v=dq8YcRi7DD4"}],"address":"022","link":"https://en.wikipedia.org/wiki/Kyuss"}],"address":"02","link":"https://www.youtube.com/"}],"address":"0","link":"https://github.com/LukasBott/mindmap"}];
 window.addEventListener('resize', setCanvasSizing);
 var freeze = false;
 var blur = false;
@@ -676,23 +676,76 @@ function drawSierpinskiGraph(center, b, tree, angle = Math.PI/6, startAddress = 
         ctx.fillStyle = tree.color || "white";
         ctx.fill();
         ctx.stroke();
-        //a is length of the inner square of the circle
-        var a = Math.sqrt(2)*b/2;
-        ctx.fillStyle = "black";
-        ctx.font = a + "px Arial";
-        var width = ctx.measureText(tree.name).width;
-        if (width > a) {
-            //scaling the font to a/width
-            var font = a*a/width;
-            ctx.font = font + "px Arial";
-            ctx.fillText(tree.name, center.x - a/2, center.y  + font/2);
-        }
-        else {
-            ctx.fillText(tree.name, center.x - width/2 , center.y  + a/2);
-        }
-        
+        fillTextToOpitmizedFontSize(center, b, tree.name);
     }
     
+}
+function fillTextToOpitmizedFontSize(center, b, name, fontName =  "Arial") {
+    //initial value is length of the inner square of the circle
+    var fontsize = Math.sqrt(2)*b/2;
+    var nameParts = name.split(' ');
+    ctx.fillStyle = "black";
+    ctx.font = fontsize + "px " + fontName;
+    var width = ctx.measureText(name).width;
+    if (width > fontsize) {
+        //scaling <fontsize> to >previous fontsize>/<width>
+        var newFontsize = fontsize*fontsize/width;
+        ctx.font = newFontsize + "px " + fontName;
+
+        //new width since ctx.font changed
+        width = ctx.measureText(name).width;
+
+        //Inital partition settings
+        var partition = [name];
+        var lines = 1;
+
+        //does not try to make new partitions if nameParts is not splittable anymore
+        // width > (lines + 1) * newFontsize targets a square form
+        //TODO: if square is overdone: the next rect could be the better joice -> fix it to be the choice if so
+        while (nameParts.length >= (lines + 1) && width > (lines + 1) * newFontsize) {
+            lines = lines + 1;
+            var partition = getOptimalPartitionOfNameParts(name, lines);
+            var maxWidth = 0;
+            for(var i in partition) {
+                var lineWidth = ctx.measureText(partition[i]).width;
+                maxWidth = Math.max(lineWidth, maxWidth);
+            }
+            //rescaling paras
+            newFontsize = newFontsize*(width/maxWidth);
+            width = maxWidth;
+            ctx.font = newFontsize + "px " + fontName;
+        }
+        var y = center.y - newFontsize*lines/2;
+        for (var i in partition){
+            //drawing every line
+            y = y + newFontsize;
+            ctx.fillText(partition[i], center.x - fontsize/2, y);
+        }
+    }
+    else {
+        ctx.fillText(name, center.x - width/2 , center.y  + fontsize/2);
+    }
+}
+//splits the name to an array of minimum sized lines
+//is not quiet the optimum but works fine so far
+function getOptimalPartitionOfNameParts(name, lines) {
+    var nameParts = name.split(' ');
+    while (nameParts.length > lines) {
+        var minSize = ctx.measureText(name).width;
+        var targetIndex = -1;
+        //finding minimal size of all pairs
+        for (var i = 0; i < nameParts.length-1; i++) {
+            var textLength = ctx.measureText(nameParts.slice(i, i+2).join(' ')).width;
+            if(textLength < minSize) {
+                minSize = textLength;
+                targetIndex = i;
+            }
+        }
+        //meld both parts of the array and deleting the melded part
+        nameParts.splice(targetIndex, 1, nameParts.slice(targetIndex, targetIndex + 2).join(' '));
+        nameParts.splice(targetIndex + 1, 1);
+    }
+    return nameParts;
 }
 function innerTriangle(top, left, right) {
     var triangleTop = {x:  (right.x + left.x)/2, y: right.y};

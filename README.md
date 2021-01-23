@@ -1,11 +1,11 @@
 # mindmap
 Sierpinski Mind Map
-<b>Version 0.3:</b>
+<b>Version 0.4:</b>
 - works with chrome
 - works only restricted with firefox: close menu button does not hide dialog
 
 <b>new:</b>
-- links implemented
+- node names are split in multiple lines, if this is possible and better
 
 This is an application written in JavaScript using the HTML canvas to visualize a hierarchical graph (HG).
 
@@ -21,6 +21,8 @@ Graphs should be saveable and loadable. The concept Sierpinski triangle/graph is
 <b>Just check it out:</b>
 
 https://htmlpreview.github.io/?https://github.com/LukasBott/mindmap/blob/main/SierpinskiMindmap.html
+
+(You want to open the earlier verisons? -> just right-click on it if you are on the map)
 
 <b>Or:</b>
 1. Download <b>SierpinskyMindmap.html</b>
