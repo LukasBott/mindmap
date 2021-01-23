@@ -1,6 +1,6 @@
 # mindmap
 Sierpinski Mind Map
-<b>Version 0.4:</b>
+<b>Version 0.4.1:</b>
 - works with chrome
 - works only restricted with firefox: close menu button does not hide dialog
 
