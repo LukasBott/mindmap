@@ -332,11 +332,26 @@ function createNodeEditor(node) {
         content.insertBefore(linkEditor, null);
     }
     for (var key in node) {
+        if (key == 'openlinksintab')
+            continue;
         if (key == 'link' && node[key] != ''){
             var link = doc.createElement('a');
             link.href = node[key];
+            if (node.openlinksintab != null) {
+                link.target = "_blank";
+            }
             link.innerHTML = 'Open Link';
+            var checkbox = doc.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.checked = !(node.openlinksintab == null);
+            checkbox.onchange = function(){node.openlinksintab = this.checked ? '' : null; createNodeEditor(node);};
             content.insertBefore(link, null);
+            content.insertBefore(checkbox, null);
+
+            var label = doc.createElement('label');
+            label.innerHTML = 'in new Tab';
+            content.insertBefore(label, null);
+
             content.insertBefore(linkEditor, null);
             continue;
         }
@@ -590,6 +605,9 @@ function onCanvasClicked(event, rightButtonClicked = false){
                 return;
             }
             var link = doc.createElement('a');
+            if (node.openlinksintab != null) {
+                link.target = "_blank";
+            }
             link.href = node.link;
             link.click();
             return;
