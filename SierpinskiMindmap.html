@@ -39,7 +39,7 @@ SOFTWARE.
     </style>
 </head>
 <body>
-<canvas id = "canvas" style="position:fixed; top:0;left:0;"></canvas>
+<canvas id="canvas"  data-toggle="tooltip" title="CLICK: zoom in/out&#013;DOUBLE CLICK: open node menu&#013;RIGHT CLICK: open nodes link" style="position:fixed; top:0;left:0;"></canvas>
 <div style="position:fixed; top:0;left:0;width:0;height:0;z-index:1">
     <input  data-toggle="tooltip" title="Go back to root node" id="goToRootButton" type="image" src="data:image/png;base64,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" onclick = "javascript:clearInterval(zoomAnimation);zoomInTop(triangle, '0');" width = "50px" height = "50px", style = "padding: 10px 15px; margin: 4px 2px; cursor: pointer;" />
     <br>
@@ -57,9 +57,14 @@ SOFTWARE.
     <label for="initialChildName">child name</label>
     <input id="initialChildName" name="initialChildName" value = "New Child"/>
 </div>
-<div id = "content" style="display: none;"></div>
+<div style="position:fixed; top:0;right:0px;width:0;height:0;z-index:1">
+     <button id = "downloadSelf" data-toggle="tooltip" title="Download the very HTML file you can see, so you can run it on your local PC" onclick = "javascript: downloadSelf();" style = "float: right; background-color: green; border: none; color: white; padding: 10px 15px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 4px 2px; cursor: pointer;"></button>
+</div>
+<div id = "content" style="width: 50%; right: 25%; position: absolute; z-index: 2;" class="hide"></div>
 <script>
-var tree = [{"name":"Sierpinski Mind Map","color":"#37ec13","children":[{"name":"Tutorial","color":"#a8a8cd","children":[{"name":"Click on me","color":"#4c4cfa","children":null,"address":"000"},{"name":"Right click me","color":"#e65153","children":null,"address":"001","link":"https://en.wikipedia.org/wiki/Context_menu"},{"name":null,"address":"002","children":[null,{"name":"Advanced","color":"#a8a8cd","children":[null,null,{"name":"Click","color":"#6c61bd","children":[null,null,{"name":"Any","color":"#6053c6","children":[null,null,{"name":"Button","color":"#6053c6","children":[null,null,{"name":"U","color":"#3f2bd4","children":[null,null,{"name":"find","color":"#177d3e","children":null,"address":"002122222"}],"address":"00212222"}],"address":"0021222"}],"address":"002122"}],"address":"00212"}],"address":"0021"},{"name":"Double Click on me","color":"#4d4dd5","children":null,"address":"0022"}]}],"address":"00","link":""},{"name":"Versions","color":"#dab910","children":[{"name":"Current Version","color":"#e9261c","children":null,"address":"010","link":"https://htmlpreview.github.io/?https://github.com/LukasBott/mindmap/blob/main/SierpinskiMindmap.html"},{"name":"Version 0.3","color":"#1e10da","children":null,"address":"011","link":"https://htmlpreview.github.io/?https://github.com/LukasBott/mindmap/blob/f6926930e5311247e57872fe9cdde1c6d7a6a252/SierpinskiMindmap.html"},{"name":null,"address":"012","children":[{"name":"Version 0.1","color":"#f014d6","children":null,"address":"0121","link":"https://htmlpreview.github.io/?https://github.com/LukasBott/mindmap/blob/43f8846141bf0ed86eb36b0cf8e16df8843c27ff/SierpinskiMindmap.html"},{"name":"Version 0.2","color":"#14cff0","children":null,"address":"0122","link":"https://htmlpreview.github.io/?https://github.com/LukasBott/mindmap/blob/8054ece305234b14edd96fb3104b636025461c12/SierpinskiMindmap.html"}]}],"address":"01","link":"https://en.wikipedia.org/wiki/Software_versioning"},{"name":"Youtube","color":"#fb0e0e","children":[null,{"name":"White Stripes","color":"#ffffff","children":[null,null,{"name":"The hardes button to button","color":"#fd1717","children":null,"address":"0212","link":"https://www.youtube.com/watch?v=K4dx42YzQCE"}],"address":"021","link":"https://en.wikipedia.org/wiki/The_White_Stripes"},{"name":"Kyuss","color":"#1efb0e","children":[null,{"name":"Green maschine","color":"#2b8f24","children":null,"address":"0221","link":"https://www.youtube.com/watch?v=R-MSfd2S7lo"},{"name":"Space Cadet","color":"#2c2acb","children":null,"address":"0222","link":"https://www.youtube.com/watch?v=dq8YcRi7DD4"}],"address":"022","link":"https://en.wikipedia.org/wiki/Kyuss"}],"address":"02","link":"https://www.youtube.com/"}],"address":"0","link":"https://github.com/LukasBott/mindmap"}];
+const version = '0.5';
+document.getElementById('downloadSelf').innerHTML = 'Download Version ' + version;
+var tree = [{"name":"Sierpinski Mind Map","color":"#37ec13","children":[{"name":"Tutorial","color":"#a8a8cd","children":[{"name":"Click on me","color":"#4c4cfa","children":null,"address":"000"},{"name":"Right click me","color":"#e65153","children":null,"address":"001","link":"https://en.wikipedia.org/wiki/Context_menu","openlinksintab":""},{"name":null,"address":"002","children":[null,{"name":"Advanced","color":"#a8a8cd","children":[null,null,{"name":"Click","color":"#6c61bd","children":[null,null,{"name":"Any","color":"#6053c6","children":[null,null,{"name":"Button","color":"#6053c6","children":[null,null,{"name":"U","color":"#3f2bd4","children":[null,null,{"name":"find","color":"#177d3e","children":null,"address":"002122222"}],"address":"00212222"}],"address":"0021222"}],"address":"002122"}],"address":"00212"}],"address":"0021"},{"name":"Double Click on me","color":"#4d4dd5","children":null,"address":"0022"}]}],"address":"00","link":""},{"name":"Versions","color":"#dab910","children":[{"name":"Current Version","color":"#e9261c","children":null,"address":"010","link":"https://htmlpreview.github.io/?https://github.com/LukasBott/mindmap/blob/main/SierpinskiMindmap.html","openlinksintab":""},{"name":null,"address":"011","children":[null,{"name":"Version 0.3","color":"#1e10da","children":null,"address":"0111","link":"https://htmlpreview.github.io/?https://github.com/LukasBott/mindmap/blob/f6926930e5311247e57872fe9cdde1c6d7a6a252/SierpinskiMindmap.html","openlinksintab":""},{"name":"Version 0.4.1","color":"#51fa14","children":null,"address":"0112","link":"https://htmlpreview.github.io/?https://github.com/LukasBott/mindmap/blob/d6ba5d10db8fff29a9d766e1ee9f85b0a2fbf89f/SierpinskiMindmap.html","openlinksintab":""}]},{"name":null,"address":"012","children":[null,{"name":"Version 0.1","color":"#f014d6","children":null,"address":"0121","link":"https://htmlpreview.github.io/?https://github.com/LukasBott/mindmap/blob/43f8846141bf0ed86eb36b0cf8e16df8843c27ff/SierpinskiMindmap.html","openlinksintab":""},{"name":"Version 0.2","color":"#14cff0","children":null,"address":"0122","link":"https://htmlpreview.github.io/?https://github.com/LukasBott/mindmap/blob/8054ece305234b14edd96fb3104b636025461c12/SierpinskiMindmap.html","openlinksintab":""}]}],"address":"01","link":"https://en.wikipedia.org/wiki/Software_versioning","openlinksintab":""},{"name":"Youtube","color":"#fb0e0e","children":[null,{"name":"White Stripes","color":"#ffffff","children":[null,null,{"name":"The hardest button to button","color":"#fd1717","children":null,"address":"0212","link":"https://www.youtube.com/watch?v=K4dx42YzQCE","openlinksintab":""}],"address":"021","link":"https://en.wikipedia.org/wiki/The_White_Stripes","openlinksintab":""},{"name":"Kyuss","color":"#1efb0e","children":[null,{"name":"Green maschine","color":"#2b8f24","children":null,"address":"0221","link":"https://www.youtube.com/watch?v=R-MSfd2S7lo","openlinksintab":""},{"name":"Space Cadet","color":"#2c2acb","children":null,"address":"0222","link":"https://www.youtube.com/watch?v=dq8YcRi7DD4","openlinksintab":""}],"address":"022","link":"https://en.wikipedia.org/wiki/Kyuss","openlinksintab":""}],"address":"02","link":"https://www.youtube.com/","openlinksintab":""}],"address":"0","link":"https://github.com/LukasBott/mindmap","openlinksintab":""}];
 window.addEventListener('resize', setCanvasSizing);
 var freeze = false;
 var blur = false;
@@ -150,6 +155,13 @@ function downloadTree(fileName, contentType) {
     var file = new Blob([JSON.stringify(tree)], {type: contentType});
     a.href = URL.createObjectURL(file);
     a.download = fileName;
+    a.click();
+}
+function downloadSelf(contentType = 'text/plain') {
+    var a = document.createElement("a");
+    var file = new Blob(['<html>' + document.documentElement.innerHTML + '</html>'], {type: contentType});
+    a.href = URL.createObjectURL(file);
+    a.download = 'SierpinskiMindMap_version_' + version.split('.').join('_') + '.html';
     a.click();
 }
 function rotateChildren(parentAddress, clockwise = true) {
@@ -332,11 +344,26 @@ function createNodeEditor(node) {
         content.insertBefore(linkEditor, null);
     }
     for (var key in node) {
+        if (key == 'openlinksintab')
+            continue;
         if (key == 'link' && node[key] != ''){
             var link = doc.createElement('a');
             link.href = node[key];
+            if (node.openlinksintab != null) {
+                link.target = "_blank";
+            }
             link.innerHTML = 'Open Link';
+            var checkbox = doc.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.checked = !(node.openlinksintab == null);
+            checkbox.onchange = function(){node.openlinksintab = this.checked ? '' : null; createNodeEditor(node);};
             content.insertBefore(link, null);
+            content.insertBefore(checkbox, null);
+
+            var label = doc.createElement('label');
+            label.innerHTML = 'in new Tab';
+            content.insertBefore(label, null);
+
             content.insertBefore(linkEditor, null);
             continue;
         }
@@ -439,16 +466,17 @@ function unfreezAndUnblur() {
     freeze = false;
 }
 function hideContent(){
+    var content = doc.getElementById('content');
     removeCloseContentButton();
     unfreezAndUnblur();
-    content.style = 'display: none;'
+    content.classList.add('hide');
 }
 function makeContentVisible(){
     //freezing animations and blur
     freezeAndBlur();
     var content = doc.getElementById('content');
     content.insertBefore(createCloseEntitiesButton(), content.childNodes[0]);
-    content.style = 'width: 50%; right: 25%; position: absolute; z-index: 2;'
+    content.classList.remove('hide');
 }
 function getNodeByAddress(node, address){
     if (node == null)
@@ -590,6 +618,9 @@ function onCanvasClicked(event, rightButtonClicked = false){
                 return;
             }
             var link = doc.createElement('a');
+            if (node.openlinksintab != null) {
+                link.target = "_blank";
+            }
             link.href = node.link;
             link.click();
             return;

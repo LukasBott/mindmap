@@ -1,11 +1,12 @@
 # mindmap
 Sierpinski Mind Map
-<b>Version 0.4.1:</b>
+<b>Version 0.5:</b>
 - works with chrome
-- works only restricted with firefox: close menu button does not hide dialog
+- works with firefox (with no other browsers tested)
 
 <b>new:</b>
-- node names are split in multiple lines, if this is possible and better
+- links can be opened in a new tab -> switch added in node editor
+- download button added
 
 This is an application written in JavaScript using the HTML canvas to visualize a hierarchical graph (HG).
 
