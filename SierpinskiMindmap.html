@@ -676,23 +676,26 @@ function drawSierpinskiGraph(center, b, tree, angle = Math.PI/6, startAddress = 
         ctx.fillStyle = tree.color || "white";
         ctx.fill();
         ctx.stroke();
-        //a is length of the inner square of the circle
-        var a = Math.sqrt(2)*b/2;
-        ctx.fillStyle = "black";
-        ctx.font = a + "px Arial";
-        var width = ctx.measureText(tree.name).width;
-        if (width > a) {
-            //scaling the font to a/width
-            var font = a*a/width;
-            ctx.font = font + "px Arial";
-            ctx.fillText(tree.name, center.x - a/2, center.y  + font/2);
-        }
-        else {
-            ctx.fillText(tree.name, center.x - width/2 , center.y  + a/2);
-        }
-        
+        fillTextToOpitmizedFontSize(center, b, tree.name);
     }
     
+}
+function fillTextToOpitmizedFontSize(center, b, name, fontName =  "Arial") {
+    //initial value is length of the inner square of the circle
+    var fontsize = Math.sqrt(2)*b/2;
+    var nameParts = name.split(' ');
+    ctx.fillStyle = "black";
+    ctx.font = fontsize + "px " + fontName;
+    var width = ctx.measureText(name).width;
+    if (width > fontsize) {
+        //scaling <fontsize> to >previous fontsize>/<width>
+        var newFontsize = fontsize*fontsize/width;
+        ctx.font = newFontsize + "px Arial";
+        ctx.fillText(name, center.x - fontsize/2, center.y  + newFontsize/2);
+    }
+    else {
+        ctx.fillText(name, center.x - width/2 , center.y  + fontsize/2);
+    }
 }
 function innerTriangle(top, left, right) {
     var triangleTop = {x:  (right.x + left.x)/2, y: right.y};
