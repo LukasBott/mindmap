@@ -57,8 +57,13 @@ SOFTWARE.
     <label for="initialChildName">child name</label>
     <input id="initialChildName" name="initialChildName" value = "New Child"/>
 </div>
+<div style="position:fixed; top:0;right:0px;width:0;height:0;z-index:1">
+     <button id = "downloadSelf" data-toggle="tooltip" title="Download the very HTML file you can see, so you can run it on your local PC" onclick = "javascript: downloadSelf();" style = "float: right; background-color: green; border: none; color: white; padding: 10px 15px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 4px 2px; cursor: pointer;"></button>
+</div>
 <div id = "content" style="width: 50%; right: 25%; position: absolute; z-index: 2;" class="hide"></div>
 <script>
+const version = '0.5';
+document.getElementById('downloadSelf').innerHTML = 'Download Version ' + version;
 var tree = [{"name":"Sierpinski Mind Map","color":"#37ec13","children":[{"name":"Tutorial","color":"#a8a8cd","children":[{"name":"Click on me","color":"#4c4cfa","children":null,"address":"000"},{"name":"Right click me","color":"#e65153","children":null,"address":"001","link":"https://en.wikipedia.org/wiki/Context_menu","openlinksintab":""},{"name":null,"address":"002","children":[null,{"name":"Advanced","color":"#a8a8cd","children":[null,null,{"name":"Click","color":"#6c61bd","children":[null,null,{"name":"Any","color":"#6053c6","children":[null,null,{"name":"Button","color":"#6053c6","children":[null,null,{"name":"U","color":"#3f2bd4","children":[null,null,{"name":"find","color":"#177d3e","children":null,"address":"002122222"}],"address":"00212222"}],"address":"0021222"}],"address":"002122"}],"address":"00212"}],"address":"0021"},{"name":"Double Click on me","color":"#4d4dd5","children":null,"address":"0022"}]}],"address":"00","link":""},{"name":"Versions","color":"#dab910","children":[{"name":"Current Version","color":"#e9261c","children":null,"address":"010","link":"https://htmlpreview.github.io/?https://github.com/LukasBott/mindmap/blob/main/SierpinskiMindmap.html","openlinksintab":""},{"name":null,"address":"011","children":[null,{"name":"Version 0.3","color":"#1e10da","children":null,"address":"0111","link":"https://htmlpreview.github.io/?https://github.com/LukasBott/mindmap/blob/f6926930e5311247e57872fe9cdde1c6d7a6a252/SierpinskiMindmap.html","openlinksintab":""},{"name":"Version 0.4.1","color":"#51fa14","children":null,"address":"0112","link":"https://htmlpreview.github.io/?https://github.com/LukasBott/mindmap/blob/d6ba5d10db8fff29a9d766e1ee9f85b0a2fbf89f/SierpinskiMindmap.html","openlinksintab":""}]},{"name":null,"address":"012","children":[null,{"name":"Version 0.1","color":"#f014d6","children":null,"address":"0121","link":"https://htmlpreview.github.io/?https://github.com/LukasBott/mindmap/blob/43f8846141bf0ed86eb36b0cf8e16df8843c27ff/SierpinskiMindmap.html","openlinksintab":""},{"name":"Version 0.2","color":"#14cff0","children":null,"address":"0122","link":"https://htmlpreview.github.io/?https://github.com/LukasBott/mindmap/blob/8054ece305234b14edd96fb3104b636025461c12/SierpinskiMindmap.html","openlinksintab":""}]}],"address":"01","link":"https://en.wikipedia.org/wiki/Software_versioning","openlinksintab":""},{"name":"Youtube","color":"#fb0e0e","children":[null,{"name":"White Stripes","color":"#ffffff","children":[null,null,{"name":"The hardest button to button","color":"#fd1717","children":null,"address":"0212","link":"https://www.youtube.com/watch?v=K4dx42YzQCE","openlinksintab":""}],"address":"021","link":"https://en.wikipedia.org/wiki/The_White_Stripes","openlinksintab":""},{"name":"Kyuss","color":"#1efb0e","children":[null,{"name":"Green maschine","color":"#2b8f24","children":null,"address":"0221","link":"https://www.youtube.com/watch?v=R-MSfd2S7lo","openlinksintab":""},{"name":"Space Cadet","color":"#2c2acb","children":null,"address":"0222","link":"https://www.youtube.com/watch?v=dq8YcRi7DD4","openlinksintab":""}],"address":"022","link":"https://en.wikipedia.org/wiki/Kyuss","openlinksintab":""}],"address":"02","link":"https://www.youtube.com/","openlinksintab":""}],"address":"0","link":"https://github.com/LukasBott/mindmap","openlinksintab":""}];
 window.addEventListener('resize', setCanvasSizing);
 var freeze = false;
@@ -150,6 +155,13 @@ function downloadTree(fileName, contentType) {
     var file = new Blob([JSON.stringify(tree)], {type: contentType});
     a.href = URL.createObjectURL(file);
     a.download = fileName;
+    a.click();
+}
+function downloadSelf(contentType = 'text/plain') {
+    var a = document.createElement("a");
+    var file = new Blob(['<html>' + document.documentElement.innerHTML + '</html>'], {type: contentType});
+    a.href = URL.createObjectURL(file);
+    a.download = 'SierpinskiMindMap_version_' + version.split('.').join('_') + '.html';
     a.click();
 }
 function rotateChildren(parentAddress, clockwise = true) {
