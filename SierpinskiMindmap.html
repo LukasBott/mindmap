@@ -690,12 +690,62 @@ function fillTextToOpitmizedFontSize(center, b, name, fontName =  "Arial") {
     if (width > fontsize) {
         //scaling <fontsize> to >previous fontsize>/<width>
         var newFontsize = fontsize*fontsize/width;
-        ctx.font = newFontsize + "px Arial";
-        ctx.fillText(name, center.x - fontsize/2, center.y  + newFontsize/2);
+        ctx.font = newFontsize + "px " + fontName;
+
+        //new width since ctx.font changed
+        width = ctx.measureText(name).width;
+
+        //Inital partition settings
+        var partition = [name];
+        var lines = 1;
+
+        //does not try to make new partitions if nameParts is not splittable anymore
+        // width > (lines + 1) * newFontsize targets a square form
+        //TODO: if square is overdone: the next rect could be the better joice -> fix it to be the choice if so
+        while (nameParts.length >= (lines + 1) && width > (lines + 1) * newFontsize) {
+            lines = lines + 1;
+            var partition = getOptimalPartitionOfNameParts(name, lines);
+            var maxWidth = 0;
+            for(var i in partition) {
+                var lineWidth = ctx.measureText(partition[i]).width;
+                maxWidth = Math.max(lineWidth, maxWidth);
+            }
+            //rescaling paras
+            newFontsize = newFontsize*(width/maxWidth);
+            width = maxWidth;
+            ctx.font = newFontsize + "px " + fontName;
+        }
+        var y = center.y - newFontsize*lines/2;
+        for (var i in partition){
+            //drawing every line
+            y = y + newFontsize;
+            ctx.fillText(partition[i], center.x - fontsize/2, y);
+        }
     }
     else {
         ctx.fillText(name, center.x - width/2 , center.y  + fontsize/2);
     }
+}
+//splits the name to an array of minimum sized lines
+//is not quiet the optimum but works fine so far
+function getOptimalPartitionOfNameParts(name, lines) {
+    var nameParts = name.split(' ');
+    while (nameParts.length > lines) {
+        var minSize = ctx.measureText(name).width;
+        var targetIndex = -1;
+        //finding minimal size of all pairs
+        for (var i = 0; i < nameParts.length-1; i++) {
+            var textLength = ctx.measureText(nameParts.slice(i, i+2).join(' ')).width;
+            if(textLength < minSize) {
+                minSize = textLength;
+                targetIndex = i;
+            }
+        }
+        //meld both parts of the array and deleting the melded part
+        nameParts.splice(targetIndex, 1, nameParts.slice(targetIndex, targetIndex + 2).join(' '));
+        nameParts.splice(targetIndex + 1, 1);
+    }
+    return nameParts;
 }
 function innerTriangle(top, left, right) {
     var triangleTop = {x:  (right.x + left.x)/2, y: right.y};
