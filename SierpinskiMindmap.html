@@ -719,7 +719,7 @@ function fillTextToOpitmizedFontSize(center, b, name, fontName =  "Arial") {
         for (var i in partition){
             //drawing every line
             y = y + newFontsize;
-            ctx.fillText(partition[i], center.x - fontsize/2, y);
+            ctx.fillText(partition[i], center.x - ctx.measureText(partition[i]).width/2, y);
         }
     }
     else {
