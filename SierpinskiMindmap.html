@@ -130,6 +130,10 @@ function openFile(event) {
     reader.onload = function(){
         var text = reader.result;
         tree = JSON.parse(text);
+        //exspecting the tree to be full addressified or not at all
+        if (tree.address == null) {
+            tree = addressify(tree);
+        }
         setPointerAddress('0');
         ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
