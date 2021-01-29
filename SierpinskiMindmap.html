@@ -349,11 +349,17 @@ function createLinkEditor(node) {
     linkEditor.insertBefore(linkInput, null);
     return linkEditor;
 }
+//adding all mandatory inputs for creating a new child for the node to the end of content
+function addNewChildEditor(content, node){
+    //add Child Button
+    content.insertBefore(createMakeChildButton(node), null);
+    //new child initial name
+    addChildNameInputTo(content, node);
+}
 function createNodeEditor(node) {
     var content = doc.getElementById('content');
     content.innerHTML = '';
     node.initialChildName = (node.initialChildName == null || node.initialChildName == '') ? 'no name' : node.initialChildName;
-    var btn = createMakeChildButton(node);
     if (node.color == null && node.name != null) {
         node.color = 'white';
     }
@@ -386,10 +392,7 @@ function createNodeEditor(node) {
             continue;
         }
         if (key == 'children') {
-            //add Child Button
-            content.insertBefore(btn, null);
-            addChildNameInputTo(content, node);
-            btn = null;
+            addNewChildEditor(content, node);
             var subtitle = doc.createElement('h3');
             subtitle.innerHTML = 'Children:'
             var el = createChildrenEditor(node);
@@ -428,9 +431,8 @@ function createNodeEditor(node) {
         label.innerHTML = desc;
         content.insertBefore(label , content.childNodes[0]);
     }
-    if(btn != null) {
-        content.insertBefore(btn, null);
-        addChildNameInputTo(content, node);
+    if (!('children' in node)) {
+        addNewChildEditor(content, node);
     }
     var title = doc.createElement('h1');
     title.innerHTML = node.name;
