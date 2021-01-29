@@ -54,8 +54,6 @@ SOFTWARE.
     <br>
     <label for="nodeDepth">Depth</label>
     <input type="number" onchange = "unfreezAndUnblur();" id="nodeDepth" name="nodeDepth" min="0" max="7" value = "6"/>
-    <label for="initialChildName">child name</label>
-    <input id="initialChildName" name="initialChildName" value = "New Child"/>
 </div>
 <div style="position:fixed; top:0;right:0px;width:0;height:0;z-index:1">
      <button id = "downloadSelf" data-toggle="tooltip" title="Download the very HTML file you can see, so you can run it on your local PC" onclick = "javascript: downloadSelf();" style = "float: right; background-color: green; border: none; color: white; padding: 10px 15px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 4px 2px; cursor: pointer;"></button>
@@ -83,6 +81,21 @@ ctx.font = textHeight + "px Arial";
 var registeredAddresses = [];
 tree = addressify(tree);
 
+//input for naming new children
+function addChildNameInputTo(content, node) {
+    content.insertBefore(doc.createElement('br') , null);
+    var label = doc.createElement('label');
+    label.for = 'initialChildName';
+    label.innerHTML = "new child's name";
+    content.insertBefore(label , null);
+    content.insertBefore(doc.createElement('br') , null);
+    var input = doc.createElement('input');
+    input.id = 'initialChildName';
+    input.name = 'initialChildName';
+    input.value = node.initialChildName;
+    input.onchange = function(){node.initialChildName = this.value; createNodeEditor(node);};
+    content.insertBefore(input , null);
+}
 function setCanvasSizing() {
     canvas.width = win.innerWidth || docElem.clientWidth || body.clientWidth,
     canvas.height = win.innerHeight || docElem.clientHeight || body.clientHeight;
@@ -339,6 +352,7 @@ function createLinkEditor(node) {
 function createNodeEditor(node) {
     var content = doc.getElementById('content');
     content.innerHTML = '';
+    node.initialChildName = (node.initialChildName == null || node.initialChildName == '') ? 'no name' : node.initialChildName;
     var btn = createMakeChildButton(node);
     if (node.color == null && node.name != null) {
         node.color = 'white';
@@ -348,7 +362,7 @@ function createNodeEditor(node) {
         content.insertBefore(linkEditor, null);
     }
     for (var key in node) {
-        if (key == 'openlinksintab')
+        if (key == 'openlinksintab' || key == 'initialChildName')
             continue;
         if (key == 'link' && node[key] != ''){
             var link = doc.createElement('a');
@@ -374,6 +388,7 @@ function createNodeEditor(node) {
         if (key == 'children') {
             //add Child Button
             content.insertBefore(btn, null);
+            addChildNameInputTo(content, node);
             btn = null;
             var subtitle = doc.createElement('h3');
             subtitle.innerHTML = 'Children:'
@@ -415,6 +430,7 @@ function createNodeEditor(node) {
     }
     if(btn != null) {
         content.insertBefore(btn, null);
+        addChildNameInputTo(content, node);
     }
     var title = doc.createElement('h1');
     title.innerHTML = node.name;
