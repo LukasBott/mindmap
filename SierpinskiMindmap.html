@@ -62,7 +62,7 @@ SOFTWARE.
 </div>
 <div id = "content" style="width: 50%; right: 25%; position: absolute; z-index: 2;" class="hide"></div>
 <script>
-const version = '0.5';
+const version = '0.5.1';
 document.getElementById('downloadSelf').innerHTML = 'Download Version ' + version;
 var tree = [{"name":"Sierpinski Mind Map","color":"#37ec13","children":[{"name":"Tutorial","color":"#a8a8cd","children":[{"name":"Click on me","color":"#4c4cfa","children":null,"address":"000"},{"name":"Right click me","color":"#e65153","children":null,"address":"001","link":"https://en.wikipedia.org/wiki/Context_menu","openlinksintab":""},{"name":null,"address":"002","children":[null,{"name":"Advanced","color":"#a8a8cd","children":[null,null,{"name":"Click","color":"#6c61bd","children":[null,null,{"name":"Any","color":"#6053c6","children":[null,null,{"name":"Button","color":"#6053c6","children":[null,null,{"name":"U","color":"#3f2bd4","children":[null,null,{"name":"find","color":"#177d3e","children":null,"address":"002122222"}],"address":"00212222"}],"address":"0021222"}],"address":"002122"}],"address":"00212"}],"address":"0021"},{"name":"Double Click on me","color":"#4d4dd5","children":null,"address":"0022"}]}],"address":"00","link":""},{"name":"Versions","color":"#dab910","children":[{"name":"Current Version","color":"#e9261c","children":null,"address":"010","link":"https://htmlpreview.github.io/?https://github.com/LukasBott/mindmap/blob/main/SierpinskiMindmap.html","openlinksintab":""},{"name":null,"address":"011","children":[null,{"name":"Version 0.3","color":"#1e10da","children":null,"address":"0111","link":"https://htmlpreview.github.io/?https://github.com/LukasBott/mindmap/blob/f6926930e5311247e57872fe9cdde1c6d7a6a252/SierpinskiMindmap.html","openlinksintab":""},{"name":"Version 0.4.1","color":"#51fa14","children":null,"address":"0112","link":"https://htmlpreview.github.io/?https://github.com/LukasBott/mindmap/blob/d6ba5d10db8fff29a9d766e1ee9f85b0a2fbf89f/SierpinskiMindmap.html","openlinksintab":""}]},{"name":null,"address":"012","children":[null,{"name":"Version 0.1","color":"#f014d6","children":null,"address":"0121","link":"https://htmlpreview.github.io/?https://github.com/LukasBott/mindmap/blob/43f8846141bf0ed86eb36b0cf8e16df8843c27ff/SierpinskiMindmap.html","openlinksintab":""},{"name":"Version 0.2","color":"#14cff0","children":null,"address":"0122","link":"https://htmlpreview.github.io/?https://github.com/LukasBott/mindmap/blob/8054ece305234b14edd96fb3104b636025461c12/SierpinskiMindmap.html","openlinksintab":""}]}],"address":"01","link":"https://en.wikipedia.org/wiki/Software_versioning","openlinksintab":""},{"name":"Youtube","color":"#fb0e0e","children":[null,{"name":"White Stripes","color":"#ffffff","children":[null,null,{"name":"The hardest button to button","color":"#fd1717","children":null,"address":"0212","link":"https://www.youtube.com/watch?v=K4dx42YzQCE","openlinksintab":""}],"address":"021","link":"https://en.wikipedia.org/wiki/The_White_Stripes","openlinksintab":""},{"name":"Kyuss","color":"#1efb0e","children":[null,{"name":"Green maschine","color":"#2b8f24","children":null,"address":"0221","link":"https://www.youtube.com/watch?v=R-MSfd2S7lo","openlinksintab":""},{"name":"Space Cadet","color":"#2c2acb","children":null,"address":"0222","link":"https://www.youtube.com/watch?v=dq8YcRi7DD4","openlinksintab":""}],"address":"022","link":"https://en.wikipedia.org/wiki/Kyuss","openlinksintab":""}],"address":"02","link":"https://www.youtube.com/","openlinksintab":""}],"address":"0","link":"https://github.com/LukasBott/mindmap","openlinksintab":""}];
 window.addEventListener('resize', setCanvasSizing);
@@ -130,6 +130,10 @@ function openFile(event) {
     reader.onload = function(){
         var text = reader.result;
         tree = JSON.parse(text);
+        //exspecting the tree to be full addressified or not at all
+        if (tree.address == null) {
+            tree = addressify(tree);
+        }
         setPointerAddress('0');
         ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -463,6 +467,8 @@ function unfreezAndUnblur() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         drawSierpinskiGraph(pointerCenter, b*Math.pow(2, pointerAddress.length-1), tree);
     }
+    //reset last execution time
+    t = performance.now();
     freeze = false;
 }
 function hideContent(){
@@ -644,7 +650,22 @@ function onCanvasClicked(event, rightButtonClicked = false){
         }
     }
 }
-function drawSierpinskiGraph(center, b, tree, angle = Math.PI/6, startAddress = null, depth = 0){
+function drawSierpinskiGraph(center, b, tree, angle = Math.PI/6, startAddress = null, depth = 0, triangleInsideCanvasView = false){
+    //parent Tirangle was in not completelly in canvas view -> canvas view was completely in parent triangle or canvas view intersects triangle
+    if (!triangleInsideCanvasView) {
+        var triangle = getTriangle(center, b);
+        //the triangle is completelly inside canvas view: no need to check the children
+        triangleInsideCanvasView = ptInCanvasView(triangle.left) && ptInCanvasView(triangle.right) && ptInCanvasView(triangle.top);
+        if (!triangleInsideCanvasView){
+            if (!canvasInTriangle(triangle) &&
+                !lineIntersectCanvasView([triangle.left, triangle.top]) &&
+                !lineIntersectCanvasView([triangle.left, triangle.right]) &&
+                !lineIntersectCanvasView([triangle.top, triangle.right])){
+                //triange is completely out of range: nothing to do here
+                return;
+            }
+        }
+    }
     if (depth - pointerAddress.length >= doc.getElementById('nodeDepth').value)
         return;
     var startAngle = angle;
@@ -697,7 +718,7 @@ function drawSierpinskiGraph(center, b, tree, angle = Math.PI/6, startAddress = 
         ctx.lineWidth = 1;
         ctx.strokeStyle = '#666666';
         ctx.stroke();
-        drawSierpinskiGraph(nextCenter, b/2, children[i], angle, startAddress, depth + 1);
+        drawSierpinskiGraph(nextCenter, b/2, children[i], angle, startAddress, depth + 1, triangleInsideCanvasView);
     }
     if (tree.name) {
         //draw Cirlce
@@ -792,15 +813,21 @@ function zoomInTop(triangle, address) {
         zoomSpeed = -zoomSpeed;
     }
     else {
-        zoomSpeed = 0.5 *(address.length-pointerAddress.length) * Math.abs(address.length-pointerAddress.length);
+        zoomSpeed = 0.05 * (address.length-pointerAddress.length) * Math.abs(address.length-pointerAddress.length);
         orientation = getAddressSum(pointerAddress + address.substring(pointerAddress.length, pointerAddress.length+1))%3;
     }
     if (address.length < pointerAddress.length && scale <= 1) {
         setPointerAddress(pointerAddress.substring(0, pointerAddress.length-1));
         scale = 2;
     }
+    //reset last execution time
+    t = performance.now();
     zoomAnimation = setInterval(function(){zoomStepTop(address)}, 10);
 }
+// the time between the last Execution of zoomStepTop
+var t = null;
+// the estimated time it takes to draw a SierpinskiGraph
+var estimatedDrawingTime = 0;
 function zoomStepTop(targetAddress){
     if (freeze) {
         return;
@@ -810,7 +837,9 @@ function zoomStepTop(targetAddress){
         freeze = true;
     }
     else {
-        scale = scale + zoomSpeed / 100;
+        //(performance.now() - t) * zoomSpeed: the scaledistance that was left behind since last drawing
+        // estimatedDrawingTime   * zoomSpeed: the approximated scaledistance that will be passed when this drawing step is done
+        scale = scale + zoomSpeed * (performance.now() - t + estimatedDrawingTime) / 100;
     }
     refPoint = (orientation == 2) ? triangle.top : (orientation == 0) ?  triangle.right : triangle.left;
     if (scale <= 1) {
@@ -830,10 +859,15 @@ function zoomStepTop(targetAddress){
             return;
         }
     }
+    const t_start = performance.now();
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.setTransform(scale, 0, 0, scale, -refPoint.x * (scale-1), -refPoint.y * (scale-1));
     drawSierpinskiGraph(pointerCenter, b*Math.pow(2, pointerAddress.length-1), tree);
+    const t_end = performance.now();
+    //estimate that the next drawing procedure time will be similar to the last
+    estimatedDrawingTime = t_end - t_start;
+    t = performance.now();
 }
 var b = Math.min(canvas.height/3, canvas.width/2 * Math.tan(Math.PI/6));
 var triangle = getTriangle({x: canvas.width/2, y: canvas.height/3*2}, b);
@@ -855,6 +889,40 @@ function setPointerAddress(address) {
     pointerCenter = getBaseTriangleByAddress(address, true);
 }
 drawSierpinskiGraph(pointerCenter, b*Math.pow(2, pointerAddress.length-1), tree);
+
+//returns true if the complete canvas is in the triangle
+function canvasInTriangle(triangle) {
+    return inTriangle(0, 0, triangle) && inTriangle(canvas.width-1, 0, triangle) && inTriangle(0, canvas.height-1, triangle) && inTriangle(canvas.width-1, canvas.height-1, triangle);
+}
+//returns true if the line intersects the canvas frame
+function lineIntersectCanvasView(line) {
+    return linesIntersect(line, [{x: 0, y: 0}, {x: canvas.width-1, y: 0}]) ||
+           linesIntersect(line, [{x: 0, y: 0}, {x: 0, y: canvas.height-1}]) ||
+           linesIntersect(line, [{x: 0, y: canvas.height-1}, {x: canvas.width-1, y: canvas.height-1}]) ||
+           linesIntersect(line, [{x: canvas.width-1, y: 0}, {x: canvas.width-1, y: canvas.height-1}]);
+}
+function ptInCanvasView(pt){
+    var x = pt.x, y = pt.y;
+    return y >= 0 && y <= canvas.height && x >= 0 && x <= canvas.width;
+}
+//https://stackoverflow.com/questions/563198/how-do-you-detect-where-two-line-segments-intersect/1201356#1201356
+function linesIntersect(l1, l2) {
+    var a = l1[0], b = l1[1], c = l2[0], d = l2[1];
+    var s = {x: b.x - a.x, y: b.y - a.y};
+    var r = {x: d.x - c.x, y: d.y - c.y};
+    var r_x_s = crossProduct(r,s);
+    if (r_x_s == 0){
+        //the lines are collinear or parallel
+        return false;
+    }
+    var aLessC = {x: a.x - c.x, y: a.y - c.y};
+    var t = crossProduct(aLessC, s)/r_x_s;
+    var u = crossProduct(aLessC, r)/r_x_s;
+    return t <= 1 && t >= 0 && u <= 1 && u >= 0;
+}
+function crossProduct(p1, p2){
+    return p1.x * p2.y - p2.x * p1.y;
+}
 </script>
 </body>
 </html>

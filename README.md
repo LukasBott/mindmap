@@ -1,10 +1,15 @@
 # mindmap
 Sierpinski Mind Map
-<b>Version 0.5:</b>
+<b>Version 0.5.1:</b>
 - works with chrome
 - works with firefox (with no other browsers tested)
 
 <b>new:</b>
+
+<b>>Version 0.5.1:</b>
+- performance update
+
+<b>>Version 0.5:</b>
 - links can be opened in a new tab -> switch added in node editor
 - download button added
 
@@ -27,4 +32,4 @@ https://htmlpreview.github.io/?https://github.com/LukasBott/mindmap/blob/main/Si
 
 <b>Or:</b>
 1. Download <b>SierpinskyMindmap.html</b>
-2. Open <b>SierpinskyMindmap.html</b> with a browser (better use chrome but i am working on it)
+2. Open <b>SierpinskyMindmap.html</b> with a browser
