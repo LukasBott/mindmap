@@ -739,16 +739,20 @@ function drawSierpinskiGraph(center, b, tree, angle = Math.PI/6, startAddress = 
         drawSierpinskiGraph(nextCenter, b/2, children[i], angle, startAddress, depth + 1, triangleInsideCanvasView);
     }
     if (tree.name) {
-        //draw Cirlce
-        ctx.beginPath();
-        ctx.arc(center.x, center.y, b/2, 0, 2 * Math.PI);
-        ctx.closePath();
-        ctx.fillStyle = tree.color || "white";
-        ctx.fill();
-        ctx.stroke();
-        fillTextToOpitmizedFontSize(center, b, tree.name);
+        drawNode(ctx, tree, center, b);
     }
     
+}
+//drawing circle by center, diameter filled with node.color and node.name as text on ctx
+function drawNode(ctx, node, center, d) {
+    ctx.beginPath();
+    //draw Cirlce
+    ctx.arc(center.x, center.y, d/2, 0, 2 * Math.PI);
+    ctx.closePath();
+    ctx.fillStyle = node.color || "white";
+    ctx.fill();
+    ctx.stroke();
+    fillTextToOpitmizedFontSize(center, d, node.name);
 }
 function fillTextToOpitmizedFontSize(center, b, name, fontName =  "Arial") {
     //initial value is length of the inner square of the circle
