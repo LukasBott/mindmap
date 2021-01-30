@@ -764,8 +764,6 @@ function drawSierpinskiGraph(center, b, tree, angle = Math.PI/6, startAddress = 
             }
         }
     }
-    if (depth - pointerAddress.length >= doc.getElementById('nodeDepth').value)
-        return;
     var startAngle = angle;
     var children = tree.children;
     //draw branch
@@ -791,37 +789,39 @@ function drawSierpinskiGraph(center, b, tree, angle = Math.PI/6, startAddress = 
         ctx.lineTo(center.x, center.y);
         ctx.stroke();
     }
-    for (var i in children) {
-        if (children[i] == null)
-            continue;
-        if(startAddress != null){
-            if (!children[i].address.startsWith(startAddress) && !startAddress.startsWith(children[i].address)){
+    //if it is too deep: do not draw children unless it is a connection node
+    if (tree.name == null || depth - pointerAddress.length + 1 < doc.getElementById('nodeDepth').value) {
+        for (var i in children) {
+            if (children[i] == null)
                 continue;
+            if (startAddress != null){
+                if (!children[i].address.startsWith(startAddress) && !startAddress.startsWith(children[i].address)){
+                    continue;
+                }
             }
+            var angle = Math.PI * (parseInt(children[i].address.substring(tree.address.length, tree.address.length + 1)) * 2/3) + startAngle;
+            var nextCenter = {x: center.x + Math.cos(angle) * b, y : center.y + Math.sin(angle) * b};
+            var nextTriangle = {x: center.x + Math.cos(angle) * b/2, y : center.y + Math.sin(angle) * b/2};
+            ctx.beginPath();
+            //tree.address.length means: it is the first node
+            if (tree.address.length == 1) {
+                ctx.moveTo(center.x, center.y);
+                ctx.lineTo(nextTriangle.x, nextTriangle.y);
+            }
+            else if (tree.name == null){
+                ctx.moveTo(parentOrigin.x, parentOrigin.y);
+                ctx.bezierCurveTo(center.x, center.y, center.x, center.y, nextTriangle.x, nextTriangle.y);
+            }
+            // the outline
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = '#666666';
+            ctx.stroke();
+            drawSierpinskiGraph(nextCenter, b/2, children[i], angle, startAddress, depth + 1, triangleInsideCanvasView);
         }
-        var angle = Math.PI * (parseInt(children[i].address.substring(tree.address.length, tree.address.length + 1)) * 2/3) + startAngle;
-        var nextCenter = {x: center.x + Math.cos(angle) * b, y : center.y + Math.sin(angle) * b};
-        var nextTriangle = {x: center.x + Math.cos(angle) * b/2, y : center.y + Math.sin(angle) * b/2};
-        ctx.beginPath();
-        //tree.address.length means: it is the first node
-        if (tree.address.length == 1) {
-            ctx.moveTo(center.x, center.y);
-            ctx.lineTo(nextTriangle.x, nextTriangle.y);
-        }
-        else if (tree.name == null){
-            ctx.moveTo(parentOrigin.x, parentOrigin.y);
-            ctx.bezierCurveTo(center.x, center.y, center.x, center.y, nextTriangle.x, nextTriangle.y);
-        }
-        // the outline
-        ctx.lineWidth = 1;
-        ctx.strokeStyle = '#666666';
-        ctx.stroke();
-        drawSierpinskiGraph(nextCenter, b/2, children[i], angle, startAddress, depth + 1, triangleInsideCanvasView);
     }
     if (tree.name) {
         drawNode(ctx, tree, center, b);
     }
-    
 }
 //drawing circle by center, diameter filled with node.color and node.name as text on ctx
 function drawNode(ctx, node, center, d) {
