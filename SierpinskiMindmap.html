@@ -623,49 +623,54 @@ function inTriangle(x, y, triangle) {
     return false;
 }
 canvas.addEventListener('click', onCanvasClicked);
-canvas.addEventListener('contextmenu', function(event) {onCanvasClicked(event, true);});
+canvas.addEventListener('contextmenu', onCanvasRightClicked);
 var clicked = false;
-function onCanvasClicked(event, rightButtonClicked = false){
-    if (rightButtonClicked){
-        event.preventDefault();
-    }
+function getAddressFromEvent(event) {
     var matrix = ctx.getTransform();
     //transforming point
     var x = (event.offsetX - matrix.e)/matrix.a;
     var y = (event.offsetY - matrix.f)/matrix.d;
-    var address = getAddress(x, y, getBaseTriangleByAddress(pointerAddress));
-    if (address){
-        //if a link exists inside the node open it: else do nothing
-        if (rightButtonClicked) {
-            var node = getNodeByAddress(tree, address);
-            if (node.link == null || node.link == ''){
-                return;
+    return getAddress(x, y, getBaseTriangleByAddress(pointerAddress));
+}
+function onCanvasRightClicked(event) {
+    event.preventDefault();
+    var address = getAddressFromEvent(event);
+    if (!address) {
+        return;
+    }
+    var node = getNodeByAddress(tree, address);
+    //if a link exists inside the node open it: else do nothing
+    if (node.link == null || node.link == ''){
+        return;
+    }
+    var link = doc.createElement('a');
+    if (node.openlinksintab != null) {
+        link.target = "_blank";
+    }
+    link.href = node.link;
+    link.click();
+}
+function onCanvasClicked(event){
+    var address = getAddressFromEvent(event);
+    if (!address){
+        return;
+    }
+    //this means double click
+    if (clicked && clicked == address) {
+        clicked = false;
+        //this will take care of zoomAnimation and bluring
+        openNodeEditor(tree, address);
+    }
+    else{
+        clicked = address;
+        //500 ms before clicked flag will be reset
+        setTimeout(function(){
+            if(clicked){
+                clearInterval(zoomAnimation);
+                zoomInTop(triangle, clicked);
             }
-            var link = doc.createElement('a');
-            if (node.openlinksintab != null) {
-                link.target = "_blank";
-            }
-            link.href = node.link;
-            link.click();
-            return;
-        }
-        //this means double click
-        if (clicked && clicked == address) {
             clicked = false;
-            //this will take care of zoomAnimation and bluring
-            openNodeEditor(tree, address);
-        }
-        else{
-            clicked = address;
-            //500 ms before clicked flag will be reset
-            setTimeout(function(){
-                if(clicked){
-                    clearInterval(zoomAnimation);
-                    zoomInTop(triangle, clicked);
-                }
-                clicked = false;
-            }, 200);
-        }
+        }, 200);
     }
 }
 function drawSierpinskiGraph(center, b, tree, angle = Math.PI/6, startAddress = null, depth = 0, triangleInsideCanvasView = false){
@@ -752,9 +757,9 @@ function drawNode(ctx, node, center, d) {
     ctx.fillStyle = node.color || "white";
     ctx.fill();
     ctx.stroke();
-    fillTextToOpitmizedFontSize(center, d, node.name);
+    fillTextToOpitmizedFontSize(ctx, center, d, node.name);
 }
-function fillTextToOpitmizedFontSize(center, b, name, fontName =  "Arial") {
+function fillTextToOpitmizedFontSize(ctx, center, b, name, fontName =  "Arial") {
     //initial value is length of the inner square of the circle
     var fontsize = Math.sqrt(2)*b/2;
     var nameParts = name.split(' ');
