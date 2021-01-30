@@ -40,6 +40,7 @@ SOFTWARE.
 </head>
 <body>
 <canvas id="canvas"  data-toggle="tooltip" title="CLICK: zoom in/out&#013;DOUBLE CLICK: open node menu&#013;RIGHT CLICK: open nodes link" style="position:fixed; top:0;left:0;"></canvas>
+<canvas id="focus" class = "hide" style="position:fixed; top:0;left:0;z-index:1"></canvas>
 <div style="position:fixed; top:0;left:0;width:0;height:0;z-index:1">
     <input  data-toggle="tooltip" title="Go back to root node" id="goToRootButton" type="image" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAqMAAAJYCAYAAABWyu+yAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAABZySURBVHhe7d2/i11nfsdxT1CpwkUKFVu4VLFFyi1UWODCKhYSUAqBA0nnQIoRbJFyYYsULkawxRZJEXBgFixIwMUEHJiABS52YVOqDaTQH6BSMPk+9zzXyPaMdO+de+/n/Hi94OGc5zaG0dzzvP2ce+aeXF1dfQAAAAl/1o8AAHB0YhQAgBgxCgBAjBgFACBGjAIAECNGAQCIEaMAAMSIUQAAYsQoAAAxYhQAgBgxCgBAjBgFACBGjAIAECNGAQCIEaMAAMSIUQAAYsQoAAAxYhQAgBgxCgBAjBgFACBGjAIAECNGAQCIEaMAAMSIUQAAYsQoAAAxYhQAgBgxCgBAjBgFACBGjAIAECNGAQCIEaMAAMSIUQAAYsQoAAAxYhQAgBgxCgBAjBgFACBGjAIAECNGAQCIEaMAAMSIUQAAYsQoAAAxYhQAgBgxCgBAjBgFACBGjAIAECNGAQCIEaMAAMSIUQAAYsQoAAAxYhQAgBgxCgBAjBgFACBGjAIAECNGAQCIEaMAAMSIUQAAYsQoAAAxYhQAgBgxCgBAjBgFACBGjAIAECNGAQCIEaMAAMSIUQAAYsQoAAAxYhQAgBgxCgBAjBgFACBGjAIAECNGAQCIEaMAAMSIUQAAYsQoAAAxYhQAgBgxCgBAjBgFACBGjAIAECNGAQCIEaMAAMSIUQAAYsQoAAAxYhQAgBgxCgBAjBgFACBGjAIAECNGAQCIEaMAAMSIUQAAYsQoAAAxYhQAgBgxCgBAjBgFACBGjALs6OTk5H6Ne30KwA7EKMAOWojW4bINQQqwOzEKsKW3QrRF6OpckALsRowCbKGi80Edvq3xdny2IP1Tj1QAtnBydXXVTwF4lx6iFzXurl74qVc1HtZ19eUwBeB97IwCbGCDEG3abmm7ZW+HFGBDYhTgPTYM0TVBCrAFMQrwDluG6JogBdiQGAW4QcXkp3XYNkTXWpB+12MWgBuIUYBrVEQ+rsPXNXYJ0bUPa1wIUoCbiVGAH+khel7jzuqF22kxK0gBbiBGAd6y5xBdE6QANxCjAN2BQnRNkAJcQ4wClAOH6No6SNt/C4AiRoHFqzg8rcNXNQ4ZomstSM8FKcBAjAKL1kP0bJgdTYteQQpQxCiwWKEQXROkAEWMAosUDtE1QQosnhgFFmckIbq2DtJ/GKYAyyJGgUWp6PtNHcYSomstSH/bIxlgUU6urq76KcC8Vey1CB178D2t6/Kzfg4we3ZGgUWYSIg2Z3ZIgSURo8DsTShE1wQpsBhiFJi1CYboWgvS9vlWgFnzmVFglirk2kNBLUSn/pT6s7pOP+3nALMjRoHZ6SHavmd+Ln+/U5ACs+U2PTArMwzR5rR/3ABgdsQoMBszDdE1QQrMktv0wCzMPETf9i81/r6u3W+GKcC0iVFg8hYUomvPazwRpMAciFFg0ipE79bh6xofr15YDkEKzIIYBSarh+hFjQerF5ZHkAKT5wEmYJKE6Er7WMJ5/5gCwCSJUWByhOgPtCD9qv9MACbHbXpgUoTojV7UeFTX9NfDFGAa7IwCk1Eheq8O39QQoj/VfiYXdkiBqbEzCkxCD9HLGvdXL3ATO6TApNgZBUZPiG7FDikwKWIUGDUhupN1kLafHcCouU0PjJYQvbWXNR7Wdf7VMAUYHzujwChViP6sDkL0dtrP7tIOKTBmdkaB0al4WkVUDRG1H3ZIgdGyMwqMihA9CDukwGiJUWA0hOhBrYP0o2EKMA5u0wOjIESPpt2qb7fs2617gDg7o0CcED2q9jNuO6TtZw4QJ0aBqIqi9jcxhehxCVJgNNymB2J6iF7U8G1BGW7ZA3F2RoEIIToK6x3Snw9TgOMTo8DRCdFRaUH6Xf83ATg6MQoclRAdpfZv0b7LXpACRydGgaOp2PmkDkJ0nAQpECFGgaOoyHlcByE6boIUODoxChxcD9HzGndWLzBm6yD9eJgCHJYYBQ5KiE5SC9Jv+r8dwEGJUeBghOiktX+zc0EKHJoYBQ5CiM6CIAUOTowCe1fxcloHIToPghQ4KF8HCuxVD9GzYcaMvKnxpNaM58MUYD/sjAJ7I0Rnre2QftX/jQH2RowCeyFEF+NMkAL7JEaBWxOiiyNIgb0Ro8CtVJT8ug5CdHkEKbAXHmACdlYx0iJUkCzb01pHnvVzgK3ZGQV2IkTp2g7pF/0cYGt2RoGtCVGu8azWk6f9HGBjdkaBrQhRbnDafzcAtiJGgY1UaNwRoryHIAW25jY98F4tROvQvt7TV0KyCbfsgY2JUeCdhCg7+n2Nv6k1pn2NKMCNxChwIyHKLbXvsW/fZy9IgRv5zChwLSHKHrTfnfP+uwRwLTEK/IQQZY8EKfBObtMDP1DRcLcO/17jk9ULsB9u2QPXEqPA93qIXtR4sHoB9uu/avxVrTuvhymAGAU6IcqRvKjxSJACaz4zCghRjqn9jl303zkAMQpLJ0QJEKTA98QoLFjFwL06CFESBCmw4jOjsFA9RC9r3F+9ABl/rPHLWoteDVNgacQoLJAQZWRe1ngoSGGZ3KaHhRGijFD7Xbzsv5vAwohRWBAhyogJUlgoMQoLIUSZAEEKCyRGYQGEKBOyDlK/q7AQHmCCmeuLegtRu01MSXuYqT3U1B5uAmbMzijMmBBlwla7+XZIYf7EKMyUEGUGBCksgBiFGRKizIgghZkTozAzQpQZWgfpL4YpMCdiFGakL9ZClDlqv9Pf1O94+057YEY8TQ8z0Rfpixp3Vy/APL2u8ajWrhfDFJg6O6MwA0KUBWm/4xd2SGE+xChMnBBlgQQpzIgYhQkToizYOkg/HabAVIlRmCghCqvf/a/rvfB4mAJTJEZhgvri256aF6Is3Z0a54IUpkuMwsT0Rfe8RluEAUEKkyZGYUKEKNxIkMJEiVGYCCEK77UO0s+GKTAFYhQmQIjCxtp75Mt6z5wOU2DsxCiMXC2qn9dBiMJ2zgQpTIMYhRHri+nvaghR2J4ghQkQozBSfRE9G2bAjgQpjJwYhRESorBXLUj/sZ8DI3NydXXVT4ExEKJwMM9qzXvaz4GRsDMKI1Ih+qs6CFE4jNN6j3l/wcjYGYWR6Iukz7bB4dkhhRGxMwojIEThqOyQwoiIUQgTohCxCtIa/mwahLlND0FCFOKe13hSa+GbYQocm51RCBGiMAqrr9q1Qwo5dkbhyPqi9881/nb1AjAGdkghRIzCEfUQbd8z33ZjgHERpBDgNj0ciRCF0XPLHgLsjMIRCFGYlBc1HtX6+HqYAodkZxQOTIjC5DyocVHv3bvDFDgkMQoH1BczIQrTI0jhSNymhwPpi9hFjbaoAdPklj0cmJ1ROAAhCrNhhxQOzM4o7JkQhVl6WeNhrZmvhimwL3ZGYY+EKMzW/RqX9R6/N0yBfRGjsCdCFGZPkMIBiFHYg744fVtDiMK8CVLYM58ZhVvqi9JljbZIAcvgM6SwJ3ZG4RaEKCxWe8//oa4B3vtwS3ZGYUdCFChtZ7TtkLadUmAHdkZhB0IU6FbXAjuksDsxCluqReejOghRYE2Qwi24TQ9b6ItNC9G2+AC8zS172IGdUdiQEAXeo10bvq1rhT/xBluwMwobEKLAFl7XeFTr64thCryLnVF4DyEKbGn1bWx2SGEzYhTeQYgCOxKksCExCjfoi8h3NYQosAtBChsQo3CNvnhc1Phw9QLAbtZB+pfDFPgxDzDBj7wVom0RAdiHNzWe1Jr7fJgCa3ZG4S1CFDiQOzXO6xrzeJgCa2IUOiEKHJgghWuIUSi1OHxaByEKHJoghR8RoyxeXxS+riFEgWNYB+nnwxSWTYyyaD1Ez2u0xQHgWNo153d1DTodprBcYpTFEqLACJwJUpZOjLJIQhQYEUHKoolRFkeIAiMkSFksMcqi9Iu9EAXGqAXpr/s5LIZvYGIxeoieDTOA0XpWa/PTfg6zZ2eURRCiwISc1jXL9YrFEKPMnhAFJkiQshhilFkTosCECVIWQYwyW3URbw8CuJADU9aCtP1xfA9dMlseYGKW+m5C2xUFmIPnNZ7Umv1mmMJ82BlldoQoMEOrv49sh5Q5EqPMihAFZkyQMktilNkQosACCFJmR4wyC0IUWJAWpF/Vde/uMIVp8wATk9Z3B9rXe7aLM8CSvKjxqNbx18MUpsnOKJMlRIGFe1Djwg4pUydGmSQhCrAiSJk8McrkCFGAHxCkTJoYZVKEKMC11kH658MUpsMDTExG/7/+r2p8unoBgB97WeNhre2vhimMnxhlEnqIXtRo//cPwM0EKZPiNj2jJ0QBtnK/xmVdO+8NUxg3McqoCVGAnQhSJkOMMlpCFOBW1kH6s2EK4yRGGaW6eH5YByEKcDstSP9Q19R2hFHyABOj028rXdZw8QTYj/YwU3uoqT3cBKNiZ5RREaIAB7G6ttohZYzEKKMhRAEOSpAySmKUURCiAEexDtKfD1PIE6PECVGAo2rX3O/q2usBUUZBjBLVbxd9W0OIAhzP6k/nCVLGwNP0xPQQbTui7f/SATi+1zUeVQu8GKZwfHZGiRCiAKNgh5Q4McrRCVGAURGkRIlRjkqIAoxSC9L2lP3jYQrHI0Y5mrrI/UUdhCjAON2pcS5IOTYxylH02z/tqXkhCjBegpSjE6McXA/RixrtNhAA4yZIOSoxykEJUYBJEqQcjRjlYIQowKStg/R0mMJh+KP3HIQQBZiVp9ULz/o57JWdUfau39YRogDzcWaHlEOxM8pe9RA9r9Fu7wAwL3ZI2Ts7o+yNEAWYPTuk7J0YZS+EKMBitCD9p34Ot+Y2PbcmRAEW6Vk1xNN+DjuzM8qtVIh+VgchCrA8p7UGnPVz2JkYZWd1EWqfG/qyhhAFWCZByq2JUXbSQ9QFCABByq34zChbE6IAXOPfavxddcWbYQqbEaNsRYgC8A7PazwRpGzDbXo2JkQBeI/VX1ep9cKzBGxMjLKRurB8UQchCsD7CFK24jY971UXlBahbVcUADbllj0bEaO8kxAF4Bb+s8ZfV2u8HqbwU2KUGwlRAPbgRY1HgpSb+Mwo1xKiAOzJgxoXta7cHabwQ3ZG+YG6WLQPnP+2xuerFwBgP+yQci0xyvd6iLbvmW9PQgLAvglSfsJtelaEKABH0G7Zf1Nrzr1hCnZGKUIUgCN7WeNhNcirYcqS2RldOCEKQMD9Gpd2SGnE6IIJUQCCBCkrbtMvVL3525/Y+LrGx6sXACDDLfuFszO6QD1EL2oIUQDS1juk7cgC2RldmLdCtD3RCABj0XZG2w5p2yllQeyMLogQBWDE2mdH7ZAukBhdCCEKwAQI0gUSowtQb+r25v6mhhAFYOwE6cL4zOjM9RC9rOFNDcCUtM+Q/rI65Y/DlLkSozMmRAGYuPYd9u277Nt32jNTbtPPlBAFYAZWzzvUmuZjZjMmRmdIiAIwI4J05sTozAhRAGZIkM6YGJ2RepO2AP1TDSEKwNysg/STYcpciNGZ6CHadkTbzigAzNE6SB8PU+ZAjM6AEAVgQe7UOBek8yFGJ06IArBAgnRGxOiECVEAFkyQzoQYnah68/2iDkIUgCVbB+lnw5QpEqMTVG+69qct2nfNC1EAlq4F6Ze1Np4OU6ZGjE5MD9GLGu2JQgBgcCZIp0mMTogQBYB3EqQTJEYnQogCwEYE6cSI0QmoN9XHdRCiALCZFqS/6ueMnBgduXoztT9Z0R5WEqIAsLkvag096+eMmBgdsR6i5zXak4IAwHZOBen4nVxdXfVTxqTePO3PNv2mhhCdj/Zv+ulwCozYv9b43+GUmfh99c7Lfs7IiFE4kvofjPbZ3/ZFBcC4Pay18b/7OXBgbtMDABAjRgEAiBGjAADEiFEAAGLEKAAAMWIUAIAYMQoAQIwYBQAgRowCABAjRgEAiBGjAADEiFEAAGLEKAAAMWIUAIAYMQoAQIwYBQAgRowCABAjRgEAiBGjAADEiFEAAGLEKAAAMWIUAIAYMQoAQIwYBQAgRowCABAjRgEAiBGjAADEiFEAAGLEKAAAMWIUAIAYMQoAQIwYBQAgRowCABAjRgEAiBGjAADEiFEAAGLEKAAAMWIUAIAYMQoAQIwYBQAgRowCABAjRgEAiBGjAADEiFEAAGLEKAAAMWIUAIAYMQoAQIwYBQAgRowCABAjRgEAiBGjAADEiFEAAGLEKAAAMWIUAIAYMQoAQIwYBQAgRowCABAjRgEAiBGjAADEiFEAAGLEKAAAMWIUAIAYMQoAQIwYBQAgRowCABAjRgEAiBGjAADEiFEAAGLEKAAAMWIUAIAYMQoAQIwYBQAgRowCABAjRgEAiBGjAADEiFEAAGLEKAAAMWIUAIAYMQoAQIwYBQAgRowCABAjRgEAiBGjAADEiFEAAGLEKAAAMWIUAIAYMQoAQIwYBQAgRowCABAjRgEAiBGjAADEiFEAAGLEKAAAMWIUAIAYMQoAQIwYBQAgRowCABAjRgEAiBGjAADEiFEAAGLEKAAAMWIUAIAYMQoAQIwYBQAgRowCABAjRgEAiBGjAADEiFEAAGLEKAAAMWIUAIAYMQoAQIwYBQAgRowCABAjRuF4/q8fgXH7qB+BIxCjcDxv+hEA6MQoAAAxYhQAgBgxCgBAjBgFACBGjAIAECNGAQCIEaMAAMSIUQAAYsQoAAAxYhQAgBgxCgBAjBgFACBGjAIAECNGAQCIEaMAAMSIUQAAYsQoAAAxYhQAgBgxCgBAjBgFACBGjAIAECNGAQCIEaMAAMSIUQAAYsQoAAAxYhQAgBgxCgBAjBgFACBGjAIAECNGAQCIEaMAAMSIUQAAYsQoAAAxYhQAgBgxCgBAjBgFACBGjAIAECNGAQCIEaMAAMSIUQAAYsQoAAAxYhQAgBgxCgBAjBgFACBGjAIAECNGAQCIEaMAAMSIUQAAYsQoAAAxYhQAgBgxCgBAjBgFACBGjAIAECNGAQCIEaMAAMSIUQAAYsQoAAAxYhQAgBgxCgBAjBgFACBGjAIAECNGAQCIEaMAAMSIUQAAYsQoAAAxYhQAgBgxCgBAjBgFACBGjAIAECNGAQCIEaMAAMSIUQAAYsQoAAAxYhQAgBgxCgBAjBgFACBGjAIAECNGAQCIEaMAAMSIUQAAYsQoAAAxYhQAgBgxCgBAjBgFACBGjAIAECNGAQCIEaMAAMSIUQAAYsQoAAAxYhQAgBgxCgBAjBgFACBGjAIAECNGAQCIEaMAAMSIUQAAYsQoAAAxYhQAgBgxCgBAjBgFACBGjAIAECNGAQCIEaMAAMSIUQAAYsQoAAAxYhQAgBgxCgBAjBgFACBGjAIAECNGAQCIEaMAAMSIUQAAYk6urq76KXBIJycnH9bhdJgBI/YftTb+Tz8HDkyMAgAQ4zY9AAAxYhQAgBgxCgBAjBgFACBGjAIAECNGAQCIEaMAAMSIUQAAYsQoAAAxYhQAgBgxCgBAjBgFACBGjAIAECNGAQCIEaMAAMSIUQAAYsQoAAAxYhQAgBgxCgBAjBgFACBGjAIAECNGAQCIEaMAAMSIUQAAYsQoAAAxYhQAgBgxCgBAjBgFACBGjAIAECNGAQCIEaMAAMSIUQAAYsQoAAAxYhQAgBgxCgBAjBgFACBGjAIAECNGAQCIEaMAAMSIUQAAYsQoAAAxYhQAgBgxCgBAjBgFACBGjAIAECNGAQCIEaMAAIR88MH/A3x3nKMoP2O3AAAAAElFTkSuQmCC" onclick = "javascript:clearInterval(zoomAnimation);zoomInTop(triangle, '0');" width = "50px" height = "50px", style = "padding: 10px 15px; margin: 4px 2px; cursor: pointer;" />
     <br>
@@ -54,6 +55,9 @@ SOFTWARE.
     <br>
     <label for="nodeDepth">Depth</label>
     <input type="number" onchange = "unfreezAndUnblur();" id="nodeDepth" name="nodeDepth" min="0" max="7" value = "6"/>
+    <br>
+    <label for="focusNodesOnMouseOver">Zoom</label>
+    <input type="checkbox" checked = "true" id="focusNodesOnMouseOver" name="focusNodesOnMouseOver"/>
 </div>
 <div style="position:fixed; top:0;right:0px;width:0;height:0;z-index:1">
      <button id = "downloadSelf" data-toggle="tooltip" title="Download the very HTML file you can see, so you can run it on your local PC" onclick = "javascript: downloadSelf();" style = "float: right; background-color: green; border: none; color: white; padding: 10px 15px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 4px 2px; cursor: pointer;"></button>
@@ -71,9 +75,13 @@ doc = document,
 docElem = doc.documentElement,
 body = doc.getElementsByTagName('body')[0];
 const canvas = doc.getElementById('canvas');
+const focus = doc.getElementById('focus');
 canvas.width = win.innerWidth || docElem.clientWidth || body.clientWidth,
 canvas.height = win.innerHeight || docElem.clientHeight || body.clientHeight;
+focus.width = canvas.width;
+focus.height = canvas.height;
 const ctx = canvas.getContext('2d');
+const focusCtx = focus.getContext('2d');
 const textHeight = 15;
 const nodesDistance = 150;
 ctx.font = textHeight + "px Arial";
@@ -99,6 +107,8 @@ function addChildNameInputTo(content, node) {
 function setCanvasSizing() {
     canvas.width = win.innerWidth || docElem.clientWidth || body.clientWidth,
     canvas.height = win.innerHeight || docElem.clientHeight || body.clientHeight;
+    focus.width = canvas.width;
+    focus.height = canvas.height;
     b = Math.min(canvas.height/3, canvas.width/2 * Math.tan(Math.PI/6));
     triangle = getTriangle({x: canvas.width/2, y: canvas.height/3*2}, b);
     center = getCenter(triangle);
@@ -622,8 +632,10 @@ function inTriangle(x, y, triangle) {
     }
     return false;
 }
+canvas.addEventListener('mousemove', onCanvasMouseMove);
 canvas.addEventListener('click', onCanvasClicked);
 canvas.addEventListener('contextmenu', onCanvasRightClicked);
+focus.addEventListener('mousemove', onFocusMouseMove);
 var clicked = false;
 function getAddressFromEvent(event) {
     var matrix = ctx.getTransform();
@@ -631,6 +643,59 @@ function getAddressFromEvent(event) {
     var x = (event.offsetX - matrix.e)/matrix.a;
     var y = (event.offsetY - matrix.f)/matrix.d;
     return getAddress(x, y, getBaseTriangleByAddress(pointerAddress));
+}
+function getCenterOfAddress(address){
+    var result = getBaseTriangleByAddress(pointerAddress, true);
+    var angle = Math.PI*1/6; //Math.PI*(1/6 + getAddressSum(pointerAddress) * 2/3);
+    var r = b * Math.pow(2, pointerAddress.length-1);
+    for (var i = 1; i < address.length; i++) {
+        var angle = Math.PI * (parseInt(address.substring(i, i + 1)) * 2/3) + angle;
+        result = {x: result.x + Math.cos(angle) * r, y : result.y + Math.sin(angle) * r};
+        r = r/2;
+    }
+    return result;
+}
+function onCanvasMouseMove(event) {
+    const nodeDiameter = 2*b;
+    if (!doc.getElementById('focusNodesOnMouseOver').checked){
+        return;
+    }
+    var address = getAddressFromEvent(event);
+    if (!address) {
+        return;
+    }
+    var node = getNodeByAddress(tree, address);
+    if (node.name == null) {
+        return;
+    }
+    var center = getCenterOfAddress(address);
+    var diameter = b / Math.pow(2, address.length-pointerAddress.length);
+    if(!inCircle(event.offsetX, event.offsetY, center, diameter)){
+        return;
+    }
+    //if the drawingCircle with nodeDiameter is not completely inside focus: set center one node radius length away from focus frame
+    //focus.center stays untouched because only relevant for handler
+    var x = center.x, y = center.y;
+    drawingCenter = {x: (x < nodeDiameter/2) ? nodeDiameter/2 : ((x > focus.width - nodeDiameter/2) ? focus.width - nodeDiameter/2 : x),
+                     y: (y < nodeDiameter/2) ? nodeDiameter/2 : ((y > focus.height - nodeDiameter/2) ? focus.height - nodeDiameter/2 : y)};
+    focusCtx.clearRect(0, 0, focus.width, focus.height);
+    focus.classList.remove("hide");
+    drawNode(focusCtx, node, drawingCenter, nodeDiameter);
+    focus.onclick = function(){handleClick(address);}
+    focus.oncontextmenu = function(){openNodeLink(node);}
+    focus.center = center;
+    focus.diameter = diameter;
+}
+//returns true if x,y is in circle with center and diamter
+function inCircle(x, y, center, diameter) {
+    return Math.pow(x - center.x, 2) + Math.pow(y - center.y, 2) <  Math.pow(diameter/2, 2)
+}
+//if user leaves the circle in original size: close focus
+function onFocusMouseMove(event) {
+    if (inCircle(event.offsetX, event.offsetY, this.center, this.diameter)) {
+        return;
+    }
+    focus.classList.add("hide");
 }
 function onCanvasRightClicked(event) {
     event.preventDefault();
@@ -643,6 +708,10 @@ function onCanvasRightClicked(event) {
     if (node.link == null || node.link == ''){
         return;
     }
+    openNodeLink(node);
+}
+//redirects to nodes link
+function openNodeLink(node) {
     var link = doc.createElement('a');
     if (node.openlinksintab != null) {
         link.target = "_blank";
@@ -655,6 +724,11 @@ function onCanvasClicked(event){
     if (!address){
         return;
     }
+    handleClick(address);
+}
+//if there was a click on an address wait 200 ms for the next click on same address -> if next Click -> trigger double click routine
+//                                                                                     else -> trigger single click routine
+function handleClick(address) {
     //this means double click
     if (clicked && clicked == address) {
         clicked = false;
@@ -663,7 +737,7 @@ function onCanvasClicked(event){
     }
     else{
         clicked = address;
-        //500 ms before clicked flag will be reset
+        //200 ms before clicked flag will be reset
         setTimeout(function(){
             if(clicked){
                 clearInterval(zoomAnimation);
