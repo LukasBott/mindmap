@@ -58,6 +58,12 @@ SOFTWARE.
     <br>
     <label for="focusNodesOnMouseOver">Zoom</label>
     <input type="checkbox" checked = "true" id="focusNodesOnMouseOver" name="focusNodesOnMouseOver"/>
+    <br>
+    <label for="shape">Choose a shape style:</label>
+    <select name="shape" id="shape" onchange = "javascript:unfreezAndUnblur();" style="width: 200px;">
+        <option value="cube">Cube</option>
+        <option value="circle">Circle</option>
+    </select>
 </div>
 <div style="position:fixed; top:0;right:0px;width:0;height:0;z-index:1">
      <button id = "downloadSelf" data-toggle="tooltip" title="Download the very HTML file you can see, so you can run it on your local PC" onclick = "javascript: downloadSelf();" style = "float: right; background-color: green; border: none; color: white; padding: 10px 15px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 4px 2px; cursor: pointer;"></button>
@@ -681,7 +687,7 @@ function onCanvasMouseMove(event) {
                      y: (y < nodeDiameter/2) ? nodeDiameter/2 : ((y > focus.height - nodeDiameter/2) ? focus.height - nodeDiameter/2 : y)};
     focusCtx.clearRect(0, 0, focus.width, focus.height);
     focus.classList.remove("hide");
-    drawNode(focusCtx, node, drawingCenter, nodeDiameter);
+    drawNode(focusCtx, node, drawingCenter, nodeDiameter, doc.getElementById('shape').value);
     focus.onclick = function(){handleClick(address);}
     focus.oncontextmenu = function(){openNodeLink(node);}
     focus.center = center;
@@ -781,7 +787,8 @@ function drawSierpinskiGraph(center, b, tree, angle = Math.PI/6, startAddress = 
     }
     var parentOrigin = {x: center.x + Math.cos(startAngle + Math.PI) * b, y : center.y + Math.sin(startAngle + Math.PI) * b};
     //drawing the line to parent if tree is root: do not draw anyway
-    if (tree.address.length > 1 && tree.name != null){
+    var shape = doc.getElementById('shape').value;
+    if (shape == 'circle' && tree.address.length > 1 && tree.name != null) {
         ctx.lineWidth = 1;
         ctx.strokeStyle = '#666666';
         ctx.beginPath();
@@ -795,7 +802,7 @@ function drawSierpinskiGraph(center, b, tree, angle = Math.PI/6, startAddress = 
             if (children[i] == null)
                 continue;
             if (startAddress != null){
-                if (!children[i].address.startsWith(startAddress) && !startAddress.startsWith(children[i].address)){
+                if (!children[i].address.startsWith(startAddress) && !startAddress.startsWith(children[i].address)) {
                     continue;
                 }
             }
@@ -804,11 +811,11 @@ function drawSierpinskiGraph(center, b, tree, angle = Math.PI/6, startAddress = 
             var nextTriangle = {x: center.x + Math.cos(angle) * b/2, y : center.y + Math.sin(angle) * b/2};
             ctx.beginPath();
             //tree.address.length means: it is the first node
-            if (tree.address.length == 1) {
+            if (shape == 'circle' && tree.address.length == 1 && tree.name == null) {
                 ctx.moveTo(center.x, center.y);
                 ctx.lineTo(nextTriangle.x, nextTriangle.y);
             }
-            else if (tree.name == null){
+            else if (shape == 'circle' && tree.name == null) {
                 ctx.moveTo(parentOrigin.x, parentOrigin.y);
                 ctx.bezierCurveTo(center.x, center.y, center.x, center.y, nextTriangle.x, nextTriangle.y);
             }
@@ -819,20 +826,104 @@ function drawSierpinskiGraph(center, b, tree, angle = Math.PI/6, startAddress = 
             drawSierpinskiGraph(nextCenter, b/2, children[i], angle, startAddress, depth + 1, triangleInsideCanvasView);
         }
     }
-    if (tree.name) {
-        drawNode(ctx, tree, center, b);
+    if (tree.name == null) {
+        tree.color = 'lightgrey';
+    }
+    if (shape == 'cube' || tree.name) {
+        drawNode(ctx, tree, center, b, shape);
     }
 }
+//https://stackoverflow.com/questions/6443990/javascript-calculate-brighter-colour
+function increase_brightness(hex, percent){
+    // strip the leading # if it's there
+    hex = hex.replace(/^\s*#|\s*$/g, '');
+
+    // convert 3 char codes --> 6, e.g. `E0F` --> `EE00FF`
+    if(hex.length == 3){
+        hex = hex.replace(/(.)/g, '$1$1');
+    }
+
+    var r = parseInt(hex.substr(0, 2), 16),
+        g = parseInt(hex.substr(2, 2), 16),
+        b = parseInt(hex.substr(4, 2), 16);
+
+    return '#' +
+       ((0|(1<<8) + r + (256 - r) * percent / 100).toString(16)).substr(1) +
+       ((0|(1<<8) + g + (256 - g) * percent / 100).toString(16)).substr(1) +
+       ((0|(1<<8) + b + (256 - b) * percent / 100).toString(16)).substr(1);
+}
 //drawing circle by center, diameter filled with node.color and node.name as text on ctx
-function drawNode(ctx, node, center, d) {
+function drawNode(ctx, node, center, d, shape) {
+    var color = colourNameToHex(node.color || "white");
+    if (!color) {
+        color = node.color;
+    }
+    if (shape == 'circle') {
+        //drawNode is called bottom up by the recursive drawing function
+        //the cubes have to use source-over because they have to draw over the default line
+        ctx.globalCompositeOperation = 'source-over';
+        drawCircle(ctx, center, d/2, color);
+    }
+    if (shape == 'cube') {
+        //drawNode is called bottom up by the recursive drawing function
+        //the cubes have to use destination-over because otherwise the parents would draw over their children
+        ctx.globalCompositeOperation = 'destination-over';
+        drawCube(ctx, center, d, color);
+    }
+    ctx.globalCompositeOperation = 'source-over';
+    if (node.name) {
+        fillTextToOpitmizedFontSize(ctx, center, d, node.name);
+    }
+}
+function drawCircle(ctx, center, radius, color) {
+    ctx.fillStyle = color;
     ctx.beginPath();
-    //draw Cirlce
-    ctx.arc(center.x, center.y, d/2, 0, 2 * Math.PI);
+    ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI);
     ctx.closePath();
-    ctx.fillStyle = node.color || "white";
     ctx.fill();
     ctx.stroke();
-    fillTextToOpitmizedFontSize(ctx, center, d, node.name);
+}
+function drawCube(ctx, center, d, color) {
+    //computing the cube edges
+    const upperEdge = {x: center.x, y: center.y-d};
+    const lowerEdge = {x: center.x, y: center.y+d};
+    const middleEdge = {x: center.x, y: center.y};
+    const rightUpperEdge = {x: upperEdge.x + Math.cos(Math.PI/6) * d, y : upperEdge.y + Math.sin(Math.PI/6) * d};
+    const leftUpperEdge = {x: upperEdge.x + Math.cos(Math.PI*5/6) * d, y : upperEdge.y + Math.sin(Math.PI*5/6) * d};
+    const rightLowerEdge = {x: rightUpperEdge.x, y : rightUpperEdge.y + d};
+    const leftLowerEdge = {x: leftUpperEdge.x, y : leftUpperEdge.y + d};
+
+    //draw top surface
+    ctx.beginPath();
+    ctx.moveTo(upperEdge.x, upperEdge.y);
+    ctx.lineTo(leftUpperEdge.x, leftUpperEdge.y);
+    ctx.lineTo(middleEdge.x, middleEdge.y);
+    ctx.lineTo(rightUpperEdge.x, rightUpperEdge.y);
+    ctx.lineTo(upperEdge.x, upperEdge.y);
+    ctx.closePath();
+    ctx.fillStyle = increase_brightness(color, 50);
+    ctx.fill();
+
+    //draw left front surface
+    ctx.beginPath();
+    ctx.moveTo(leftUpperEdge.x, leftUpperEdge.y);
+    ctx.lineTo(middleEdge.x, middleEdge.y);
+    ctx.lineTo(lowerEdge.x, lowerEdge.y);
+    ctx.lineTo(leftLowerEdge.x, leftLowerEdge.y);
+    ctx.lineTo(leftUpperEdge.x, leftUpperEdge.y);
+    ctx.closePath();
+    ctx.fillStyle = increase_brightness(color, 30);
+    ctx.fill();
+
+    //draw right front surface
+    ctx.moveTo(rightUpperEdge.x, rightUpperEdge.y);
+    ctx.lineTo(middleEdge.x, middleEdge.y);
+    ctx.lineTo(lowerEdge.x, lowerEdge.y);
+    ctx.lineTo(rightLowerEdge.x, rightLowerEdge.y);
+    ctx.lineTo(rightUpperEdge.x, rightUpperEdge.y);
+    ctx.closePath();
+    ctx.fillStyle = color;
+    ctx.fill();
 }
 function fillTextToOpitmizedFontSize(ctx, center, b, name, fontName =  "Arial") {
     //initial value is length of the inner square of the circle
