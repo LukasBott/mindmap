@@ -39,7 +39,7 @@ SOFTWARE.
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.css" />
 </head>
-<body>
+<body onload="javascript:$('#shape').select2(options); $('.select2-container--default .select2-selection--single').css({'height': 'auto'});">
 <canvas id="canvas"  data-toggle="tooltip" title="CLICK: zoom in/out&#013;DOUBLE CLICK: open node menu&#013;RIGHT CLICK: open nodes link" style="position:fixed; top:0;left:0;"></canvas>
 <canvas id="focus" class = "hide" style="position:fixed; top:0;left:0;z-index:1"></canvas>
 <div style="position:fixed; top:0;left:0;width:0;height:0;z-index:1">
@@ -89,8 +89,6 @@ var options = {
     //how the options of the select list should look like
     'templateResult': optionStructure
 };
-$('#shape').select2(options);
-$('.select2-container--default .select2-selection--single').css({'height': 'auto'});
 </script>
 <script>
 const version = '0.7';
