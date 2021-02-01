@@ -1,17 +1,12 @@
 # mindmap
 Sierpinski Mind Map
-<b>Version 0.6.1:</b>
+<b>Version 0.7:</b>
 - works with chrome
 - works with firefox (with no other browser tested)
 
 <b>new:</b>
-
-<b>>Version 0.6.1:</b>
-- node depth has better drawing concept
-
-<b>>Version 0.6:</b>
-- switchable zoom for each node
-- child name for new child is not global anymore
+- shapes are switchable now
+- new shape: cube
 
 This is an application written in JavaScript using the HTML canvas to visualize a hierarchical graph (HG).
 
